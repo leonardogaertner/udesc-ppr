@@ -24,9 +24,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
+import controle.ControladorJogoParImpar;
+import controle.Observador;
 import modelo.Mao;
 
-public class TelaParImpar extends JFrame {
+public class TelaParImpar extends JFrame implements Observador {
 
 	private static final long serialVersionUID = 1L;
 	private JButton jbNovo;
@@ -37,25 +39,26 @@ public class TelaParImpar extends JFrame {
 	private JRadioButton jrbPar;
 	private JRadioButton jrbImpar;
 	private JButton jbPosterior;
-	private int idxMao;
+	//private int idxMao;
 	private JButton jbJogar;
 	private JList<Mao> listSorteios;
-	private Random sorteio;
-	private int minhaVit, pcVit; 
+//	private Random sorteio;
+//	private int minhaVit, pcVit; 
+	private ControladorJogoParImpar jogo;
 	
-	private List<Mao> maos = new ArrayList<>();
+	//private List<Mao> maos = new ArrayList<>();
 	private MaoModel maoModel;
 
 	class MaoModel extends AbstractListModel<Mao> {
 
 		@Override
 		public Mao getElementAt(int index) {
-			return maos.get(index);
+			return jogo.getMao(index);
 		}
 
 		@Override
 		public int getSize() {
-			return maos.size();
+			return jogo.MaoSize();
 		}
 		
 		public void repaint() {
@@ -65,12 +68,13 @@ public class TelaParImpar extends JFrame {
 	}
 	
 	public TelaParImpar() {
+		this.jogo = new ControladorJogoParImpar();
+		this.jogo.addObservador(this);
 		setTitle("Prova 1 55PPR");
 		setSize(300, 450);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		sorteio = new Random();
 		initComponents();
 		addEventos();
 	}
@@ -172,11 +176,15 @@ public class TelaParImpar extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				maos.clear();
-				minhaVit = 0;
-				pcVit = 0;
-				maoModel.repaint();
-				habilitarComponentes(false);
+				
+//				maos.clear();
+//				minhaVit = 0;
+//				pcVit = 0;
+//				maoModel.repaint();
+//				habilitarComponentes(false);
+				
+				jogo.novo();
+
 			}
 		});	
 		
@@ -184,8 +192,9 @@ public class TelaParImpar extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				cardLayout2.next(jpMinhaMao);
-				idxMao = (idxMao + 1) % 6;
+//				cardLayout2.next(jpMinhaMao);
+//				idxMao = (idxMao + 1) % 6;
+				jogo.posterior();
 			}
 			
 		});
@@ -194,29 +203,31 @@ public class TelaParImpar extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int maoPC = sorteio.nextInt(6);
-
-				Mao mao = new Mao(jrbPar.isSelected(), maoPC, idxMao);
-				maos.add(mao);
-				maoModel.repaint();
-
-				cardLayout1.show(jpMaosPC, maoPC + "");
+//				int maoPC = sorteio.nextInt(6);
+//
+//				Mao mao = new Mao(jrbPar.isSelected(), maoPC, idxMao);
+//				maos.add(mao);
+//				maoModel.repaint();
+//
+//				cardLayout1.show(jpMaosPC, maoPC + "");
+//				
+//				boolean vencePar = ((maoPC + idxMao)%2) == 0;
+//				if (mao.isPar() == vencePar) {
+//					minhaVit++;
+//					
+//					if (minhaVit == 3) {
+//						JOptionPane.showMessageDialog(null, "Parab\u00e9ns, voc\u00ea venceu");
+//						habilitarComponentes(true);
+//					}
+//				} else {
+//					pcVit++;
+//					if (pcVit == 3) {
+//						JOptionPane.showMessageDialog(null, "Naba, o PC venceu");
+//						habilitarComponentes(true);
+//					}
+//				}
 				
-				boolean vencePar = ((maoPC + idxMao)%2) == 0;
-				if (mao.isPar() == vencePar) {
-					minhaVit++;
-					
-					if (minhaVit == 3) {
-						JOptionPane.showMessageDialog(null, "Parab\u00e9ns, voc\u00ea venceu");
-						habilitarComponentes(true);
-					}
-				} else {
-					pcVit++;
-					if (pcVit == 3) {
-						JOptionPane.showMessageDialog(null, "Naba, o PC venceu");
-						habilitarComponentes(true);
-					}
-				}
+				jogo.jogar(jrbPar.isSelected());
 				
 			}
 			
@@ -237,5 +248,36 @@ public class TelaParImpar extends JFrame {
 		TelaParImpar j = new TelaParImpar();
 		j.setVisible(true);
 	}
+
+	@Override
+	public void iniciouJogo() {
+		maoModel.repaint();
+		habilitarComponentes(false);
+		
+	}
+
+	@Override
+	public void posteriorJogo() {
+		cardLayout2.next(jpMinhaMao);
+	}
+	
+	@Override
+	public void maoPC(int maoPC) {
+		maoModel.repaint();
+	}
+
+	@Override
+	public void vitoriaJogo() {
+		JOptionPane.showMessageDialog(null, "Parab\u00e9ns, voc\u00ea venceu");
+		habilitarComponentes(true);
+	}
+
+	@Override
+	public void derrotaJogo() {
+		JOptionPane.showMessageDialog(null, "Naba, o PC venceu");
+		habilitarComponentes(true);
+	}
+
+
 
 }

@@ -23,7 +23,7 @@ public class Janela extends JFrame implements Observador {
 		loterias = new LoteriasUCImpl();
 		loterias.addObservador(this);
 		setTitle("Sorteio da Mega Sena");
-		setSize(490, 150); 
+		setSize(490, 180); 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
