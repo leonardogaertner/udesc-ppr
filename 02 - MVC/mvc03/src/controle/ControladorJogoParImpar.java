@@ -14,7 +14,6 @@ public class ControladorJogoParImpar {
 	private List<Mao> maos = new ArrayList<>();
 	private int idxMao;
 	private Random sorteio;
-	private JList<Mao> listSorteios;
 	
 
 	public ControladorJogoParImpar() {

@@ -7,8 +7,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -24,7 +22,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import contoller.Controller;
 import contoller.Observer;
-import model.Pedido;
 import model.Produto;
 
 @SuppressWarnings("serial")
@@ -53,6 +50,33 @@ public class Janela extends JFrame implements Observer {
 //	private List<Pedido> tabelaPedidos = new ArrayList<>();
 
 	private ItensTableModel itModel;
+	
+	@Override
+	public void iniciarCompra() {
+		habilitarComponentes(true);
+	}
+
+	@Override
+	public void previous() {
+		cardLayout.previous(jpProdutos);		
+	}
+
+	@Override
+	public void next() {
+		cardLayout.next(jpProdutos);
+	}
+
+	@Override
+	public void addItem() {
+		itModel.fireTableDataChanged();
+	}
+
+	@Override
+	public void concluir() {
+		itModel.fireTableDataChanged();
+		cardLayout.first(jpProdutos);
+		habilitarComponentes(false);
+	}
 
 	class ItensTableModel extends AbstractTableModel {
 
@@ -72,13 +96,12 @@ public class Janela extends JFrame implements Observer {
 		
 		@Override
 		public int getRowCount() {
-			//return tabelaPedidos.size() + 1;
-			return controller.getRowCount();
+			return controller.getTabelaPedidos().size() + 1;
 		}
 
 		@Override
 		public Object getValueAt(int rowIndex, int colIndex) {
-			return controller.getValueAt(rowIndex, colIndex);
+			return controller.getPrecoTotal();
 //			if (rowIndex == tabelaPedidos.size()) {
 //				if (colIndex == 2) {
 //					double total = 0;
@@ -284,7 +307,7 @@ public class Janela extends JFrame implements Observer {
 //				} else
 //					alvo.addQtdade();
 
-				// addItem - fireTableDataChanged itModel.fireTableDataChanged();
+				// addItem - itModel.fireTableDataChanged();
 			}
 		});
 
@@ -312,32 +335,5 @@ public class Janela extends JFrame implements Observer {
 		Janela j = new Janela();
 		j.setVisible(true);
 	}
-
-	@Override
-	public void previous() {
-		cardLayout.previous(jpProdutos);		
-	}
-
-	@Override
-	public void next() {
-		cardLayout.next(jpProdutos);
-	}
-
-	@Override
-	public void addItem() {
-		itModel.fireTableDataChanged();
-	}
-
-	@Override
-	public void concluir() {
-		itModel.fireTableDataChanged();
-		cardLayout.first(jpProdutos);
-		habilitarComponentes(false);
-	}
-
-	@Override
-	public void iniciarCompra() {
-		habilitarComponentes(true);		
-	}
-
+	
 }
