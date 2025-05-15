@@ -68,9 +68,9 @@ public class Sistema {
 		Sistema.accept(v5);
 		System.out.println("Fim do ProjetoA"+ "\n");
 		
-		VisitorMontarEquipe v6 = new VisitorMontarEquipe(projetoC);
-		Sistema.accept(v6);
-		System.out.println(v6.isCompleto() + "\n" + v6.getMembrosEquipe() + "\n");
+		//VisitorMontarEquipe v6 = new VisitorMontarEquipe(projetoC);
+		Sistema.accept(v3);
+		System.out.println(v3.isCompleto() + "\n" + v3.getMembrosEquipe() + "\n");
 		
 		VisitarCustoProjetoVisitor v7 = new VisitarCustoProjetoVisitor(projetoB);
 		Sistema.accept(v7);
@@ -80,9 +80,9 @@ public class Sistema {
 		Sistema.accept(v8);
 		System.out.println("Fim do ProjetoB"+ "\n");
 		
-		VisitorMontarEquipe v9 = new VisitorMontarEquipe(projetoC);
-		Sistema.accept(v9);
-		System.out.println(v9.isCompleto() + "\n" + v9.getMembrosEquipe() + "\n");
+//		VisitorMontarEquipe v9 = new VisitorMontarEquipe(projetoC);
+		Sistema.accept(v3);
+		System.out.println(v3.isCompleto() + "\n" + v3.getMembrosEquipe() + "\n");
 		
 		VisitarCustoProjetoVisitor v10 = new VisitarCustoProjetoVisitor(projetoC);
 		Sistema.accept(v10);
